@@ -15,7 +15,7 @@ private _supplySpace = _cityData select 4;
 private _supplyStored = _cityData select 5;
 
 {
-    _supplyStored set [_forEachIndex, (_supplyStored select _forEachIndex) + _x];
+    _supplyStored set [_forEachIndex, round ((_supplyStored select _forEachIndex) + _x)];
     if((_supplyStored select _forEachIndex) < 0) then
     {
         _supplyStored set [_forEachIndex, 0];

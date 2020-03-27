@@ -139,9 +139,9 @@ else
 
     //Decrease stored goods
     private _overallMultiplier = [0.5, 1, 2, 5] selectRandomWeighted [0.25, 0.4, 0.25, 0.1];
-    private _usageFood = round (_numCiv * _overallMultiplier * (0.75 + (random 0.5)));
-    private _usageWater = round (_numCiv * _overallMultiplier * (0.75 + (random 0.5)));
-    private _usageFuel =  3 * round (_numVeh * _overallMultiplier * (0.75 + (random 0.5)));
+    private _usageFood = _numCiv * _overallMultiplier * (0.75 + (random 0.5));
+    private _usageWater = _numCiv * _overallMultiplier * (0.75 + (random 0.5));
+    private _usageFuel = 2.5 * _numVeh * _overallMultiplier * (0.75 + (random 0.5));
     [_city, -_usageFood, -_usageWater, -_usageFuel] spawn A3A_fnc_changeCitySupply;
 
     //Calculate change based on radio towers
