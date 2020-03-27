@@ -46,10 +46,7 @@ else
         _moneyAddedByCity = (_moneyAddedByCity/2);
         _HRAddedByCity = (_HRAddedByCity/2);
     };
-};
 
-if(_popDestroyed == 0) then
-{
     private _prestigeChangeRebels = 0;
     private _prestigeChangeEnemy = 0;
     //City is not yet destroyed, calculate support change
@@ -139,6 +136,20 @@ if(_popDestroyed == 0) then
             };
         };
     };
+
+    //Decrease stored goods
+    private _overallMultiplier = [0.5, 1, 2, 5] selectRandomWeighted [0.25, 0.4, 0.25, 0.1];
+    //Decreasing food
+    private _usage = _numCiv * _overallMultiplier * (0.75 + (random 0.5));
+    _supplyStored set [0, (_supplyStored select 0) - _usage];
+    //Decreasing water
+    private _usage = _numCiv * _overallMultiplier * (0.75 + (random 0.5));
+    _supplyStored set [1, (_supplyStored select 1) - _usage];
+    //Decreasing fuel
+    private _usage = _numVeh * _overallMultiplier * (0.75 + (random 0.5));
+    _supplyStored set [2, (_supplyStored select 2) - _usage];
+
+    server setVariable [_city, _cityData, true];
 
     //Calculate change based on radio towers
     switch (_radioTowerHolder) do

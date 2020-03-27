@@ -1,7 +1,7 @@
 #define RED     FF0000
 #define ORANGE  FF8000
 #define GREEN   00FF00
-#define SILVER  C0C0C0
+#define GOLD    D4AF37
 
 _fn_createColoredText =
 {
@@ -25,7 +25,7 @@ _fn_createColoredText =
             }
             else
             {
-                _parsed = format ["<t color='#C0C0C0'>%1</t>", _text];
+                _parsed = format ["<t color='#D4AF37'>%1</t>", _text];
             };
         };
     };
