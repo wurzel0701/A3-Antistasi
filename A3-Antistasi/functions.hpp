@@ -39,6 +39,7 @@ class A3A
 		class blackout {};
 		class buildHQ {};
         class calculateCityResources {};
+        class changeCitySupply {};
 		class citiesToCivPatrol {};
 		class citySupportChange {};
 		class commsMP {};

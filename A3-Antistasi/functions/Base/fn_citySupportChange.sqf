@@ -19,9 +19,9 @@ private _fileName = "citySupportChange";
 waitUntil {!cityIsSupportChanging};
 cityIsSupportChanging = true;
 
-if !(_pos isEqualType "") then
+if !(_city isEqualType "") then
 {
-    _city = [citiesX, _pos] call BIS_fnc_nearestPosition
+    _city = [citiesX, _city] call BIS_fnc_nearestPosition
 };
 private _cityData = server getVariable _city;
 if (isNil "_cityData" || {!(_cityData isEqualType [])}) exitWith
