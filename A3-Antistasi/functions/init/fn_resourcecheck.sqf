@@ -21,78 +21,14 @@ while {true} do
 	_popTotal = 0;
 	_bonusFIA = 1 + (0.25*({(sidesX getVariable [_x,sideUnknown] == teamPlayer) and !(_x in destroyedSites)} count factories));
 	{
-	_city = _x;
-	_resourcesAddCitySDK = 0;
-	_hrAddCity = 0;
-	_dataX = server getVariable _city;
-	_numCiv = _dataX select 0;
-	_numVeh = _dataX select 1;
-	//_roads = _dataX select 2;
-	_prestigeNATO = _dataX select 2;
-	_prestigeSDK = _dataX select 3;
-	_power = [_city] call A3A_fnc_powerCheck;
-	_popTotal = _popTotal + _numCiv;
-	_popFIA = _popFIA + (_numCiv * (_prestigeSDK / 100));
-	_popAAF = _popAAF + (_numCiv * (_prestigeNATO / 100));
-	_multiplyingRec = if (_power != teamPlayer) then {0.5} else {1};
-	//if (not _power) then {_multiplyingRec = 0.5};
-
-	if (_city in destroyedSites) then
-		{
-		_resourcesAddCitySDK = 0;
-		_hrAddCity = 0;
-		_popCSAT = _popCSAT + _numCIV;
-		}
-	else
-		{
-		_resourcesAddCitySDK = ((_numciv * _multiplyingRec*(_prestigeSDK / 100))/3);
-		_hrAddCity = (_numciv * (_prestigeSDK / 10000));///20000 originalmente
-		switch (_power) do
-			{
-			case teamPlayer: {[-1,_suppBoost,_city] spawn A3A_fnc_citySupportChange};
-			case Occupants: {[1,-1,_city] spawn A3A_fnc_citySupportChange};
-			case Invaders: {[-1,-1,_city] spawn A3A_fnc_citySupportChange};
-			};
-		if (sidesX getVariable [_city,sideUnknown] == Occupants) then
-			{
-			_resourcesAddCitySDK = (_resourcesAddCitySDK/2);
-			_hrAddCity = (_hrAddCity/2);
-			};
-		};
-	_recAddSDK = _recAddSDK + _resourcesAddCitySDK;
-	_hrAddBLUFOR = _hrAddBLUFOR + _hrAddCity;
-	// revuelta civil!!
-	if ((_prestigeNATO < _prestigeSDK) and (sidesX getVariable [_city,sideUnknown] == Occupants)) then
-		{
-		["TaskSucceeded", ["", format ["%1 joined %2",[_city, false] call A3A_fnc_location,nameTeamPlayer]]] remoteExec ["BIS_fnc_showNotification",teamPlayer];
-		sidesX setVariable [_city,teamPlayer,true];
-		_nul = [5,0] remoteExec ["A3A_fnc_prestige",2];
-		_mrkD = format ["Dum%1",_city];
-		_mrkD setMarkerColor colorTeamPlayer;
-		garrison setVariable [_city,[],true];
-		sleep 5;
-		{_nul = [_city,_x] spawn A3A_fnc_deleteControls} forEach controlsX;
-		if ((!(["CONVOY"] call BIS_fnc_taskExists)) and (!bigAttackInProgress)) then
-			{
-			_base = [_city] call A3A_fnc_findBasesForConvoy;
-			if (_base != "") then
-				{
-				[[_city,_base],"A3A_fnc_convoy"] call A3A_fnc_scheduler;
-				};
-			};
-		[] call A3A_fnc_tierCheck;
-		};
-	if ((_prestigeNATO > _prestigeSDK) and (sidesX getVariable [_city,sideUnknown] == teamPlayer)) then
-		{
-		["TaskFailed", ["", format ["%1 joined %2",[_city, false] call A3A_fnc_location,nameOccupants]]] remoteExec ["BIS_fnc_showNotification",teamPlayer];
-		sidesX setVariable [_city,Occupants,true];
-		_nul = [-5,0] remoteExec ["A3A_fnc_prestige",2];
-		_mrkD = format ["Dum%1",_city];
-		_mrkD setMarkerColor colorOccupants;
-		garrison setVariable [_city,[],true];
-		sleep 5;
-		[] call A3A_fnc_tierCheck;
-		};
+        private _cityData = [_x] call A3A_fnc_calculateCityResources;
+        _cityData params ["_numCiv", "_popRebels", "_popEnemy", "_popDestroyed", "_moneyAddedByCity", "_HRAddedByCity"];
+        _popTotal = _popTotal + _numCiv;
+        _popAAF = _popAAF + _popEnemy;
+        _popFIA = _popFIA + _popRebels;
+        _popCSAT = _popCSAT + _popDestroyed;
+        _recAddSDK = _recAddSDK + _moneyAddedByCity;
+        _hrAddBLUFOR = _hrAddBLUFOR + _HRAddedByCity;
 	} forEach citiesX;
 	if (_popCSAT > (_popTotal / 3)) then {["destroyedSites",false,true] remoteExec ["BIS_fnc_endMission"]};
 	if ((_popFIA > _popAAF) and ({sidesX getVariable [_x,sideUnknown] == teamPlayer} count airportsX == count airportsX)) then {["end1",true,true,true,true] remoteExec ["BIS_fnc_endMission",0]};

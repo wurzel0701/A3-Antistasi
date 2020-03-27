@@ -38,6 +38,7 @@ class A3A
 		class rebelAttack {};
 		class blackout {};
 		class buildHQ {};
+        class calculateCityResources {};
 		class citiesToCivPatrol {};
 		class citySupportChange {};
 		class commsMP {};
@@ -494,7 +495,7 @@ class A3A
 		class rhsModCompat {};
 	};
 
-	class UI 
+	class UI
 	{
 		class customHint {};
 	};
