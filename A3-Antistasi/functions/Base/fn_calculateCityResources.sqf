@@ -59,15 +59,17 @@ if(_popDestroyed == 0) then
     };
 };
 
-//TODO: make the enemy side not hardcoded
-if ((_prestigeEnemy < _prestigeRebels) and (sidesX getVariable [_city,sideUnknown] == Occupants)) then
+private _sideEnemy = if(gameMode == 4) then {Invaders} else {Occupants};
+private _nameEnemy = if(gameMode == 4) then {nameInvaders} else {nameOccupants};
+private _colorEnemy = if(gameMode == 4) then {colorInvaders} else {colorOccupants};
+if ((_prestigeEnemy < _prestigeRebels) and (sidesX getVariable [_city,sideUnknown] == _sideEnemy)) then
 {
     ["TaskSucceeded", ["", format ["%1 joined %2",[_city, false] call A3A_fnc_location,nameTeamPlayer]]] remoteExec ["BIS_fnc_showNotification",teamPlayer];
     sidesX setVariable [_city, teamPlayer, true];
     [5,0] remoteExec ["A3A_fnc_prestige",2];
     private _mrkD = format ["Dum%1",_city];
     _mrkD setMarkerColor colorTeamPlayer;
-    garrison setVariable [_city,[],true];
+    garrison setVariable [_city, [], true];
     sleep 5;
     {
         [_city,_x] spawn A3A_fnc_deleteControls
@@ -84,12 +86,12 @@ if ((_prestigeEnemy < _prestigeRebels) and (sidesX getVariable [_city,sideUnknow
 };
 if ((_prestigeEnemy > _prestigeRebels) and (sidesX getVariable [_city,sideUnknown] == teamPlayer)) then
 {
-    ["TaskFailed", ["", format ["%1 joined %2",[_city, false] call A3A_fnc_location,nameOccupants]]] remoteExec ["BIS_fnc_showNotification",teamPlayer];
-    sidesX setVariable [_city, Occupants, true];
+    ["TaskFailed", ["", format ["%1 joined %2", [_city, false] call A3A_fnc_location, _nameEnemy]]] remoteExec ["BIS_fnc_showNotification",teamPlayer];
+    sidesX setVariable [_city, _sideEnemy, true];
     [-5,0] remoteExec ["A3A_fnc_prestige",2];
     private _mrkD = format ["Dum%1",_city];
-    _mrkD setMarkerColor colorOccupants;
-    garrison setVariable [_city,[],true];
+    _mrkD setMarkerColor _colorEnemy;
+    garrison setVariable [_city, [], true];
     sleep 5;
     [] call A3A_fnc_tierCheck;
 };
