@@ -17,7 +17,7 @@ private _moneyAddedByCity = 0;
 private _HRAddedByCity = 0;
 
 private _cityData = server getVariable _city;
-_cityData params ["_numCiv", "_numVeh", "_prestigeEnemy", "_prestigeRebels", ["_supplySpace", []], ["_supplyStored", []]];
+_cityData params ["_numCiv", "_numVeh", "_prestigeEnemy", "_prestigeRebels", ["_supplySpace", [1000, 1000, 1000]], ["_supplyStored", [1000, 1000, 1000]]];
 private _radioTowerHolder = [_city] call A3A_fnc_powerCheck;
 private _multiplier = if (_radioTowerHolder != teamPlayer) then {0.5} else {1};
 
@@ -53,6 +53,92 @@ if(_popDestroyed == 0) then
     private _prestigeChangeRebels = 0;
     private _prestigeChangeEnemy = 0;
     //City is not yet destroyed, calculate support change
+
+    //Get the owner of the city and the enemy
+    private _cityOwner = sidesX getVariable _city;
+
+    //Calculate change based on supplies
+    //Calculate ratios of goods
+    private _ratio = [];
+    _ratio pushBack ((_supplyStored select 0)/(_supplySpace select 0));     //FOOD supplies
+    _ratio pushBack ((_supplyStored select 1)/(_supplySpace select 1));     //WATER supplies
+    _ratio pushBack ((_supplyStored select 2)/(_supplySpace select 2));     //FUEL supplies
+
+    private _isCritical = (_ratio findIf {_x <= 0.1}) != -1;
+    private _isLow = (_ratio findIf {_x <= 0.25}) != -1;
+    private _isFull = (_ratio findIf {_x >= 0.8}) != -1;
+
+    //Calculate city reactions based on storage ratios
+    if(_isCritical) then
+    {
+        //One or more supplies are critical, city is really angry
+        if(_cityOwner == teamPlayer) then
+        {
+            _prestigeChangeRebels = _prestigeChangeRebels - 3;
+            _prestigeChangeEnemy = _prestigeChangeEnemy - 1;
+        }
+        else
+        {
+            _prestigeChangeRebels = _prestigeChangeRebels - 1;
+            _prestigeChangeEnemy = _prestigeChangeEnemy - 3;
+        };
+    }
+    else
+    {
+        if(_isLow) then
+        {
+            //One or more supplies are low, city is pissed off
+            if(_cityOwner == teamPlayer) then
+            {
+                _prestigeChangeRebels = _prestigeChangeRebels - 1;
+            }
+            else
+            {
+                _prestigeChangeEnemy = _prestigeChangeEnemy - 1;
+            };
+        }
+        else
+        {
+            if(_isFull) then
+            {
+                //Storage of one or more supply is full, city is really happy
+                if(_cityOwner == teamPlayer) then
+                {
+                    if(_prestigeRebels <= 50) then
+                    {
+                        _prestigeChangeRebels = _prestigeChangeRebels + 3;
+                    };
+                    _prestigeChangeEnemy = _prestigeChangeEnemy - 1;
+                }
+                else
+                {
+                    if(_prestigeEnemy <= 50) then
+                    {
+                        _prestigeChangeEnemy = _prestigeChangeEnemy + 3;
+                    };
+                    _prestigeChangeRebels = _prestigeChangeRebels - 1;
+                };
+            }
+            else
+            {
+                //Goods are available without any shortages or extra stocks, city is ok
+                if(_cityOwner == teamPlayer) then
+                {
+                    if(_prestigeRebels <= 50) then
+                    {
+                        _prestigeChangeRebels = _prestigeChangeRebels + 1;
+                    };
+                }
+                else
+                {
+                    if(_prestigeEnemy <= 50) then
+                    {
+                        _prestigeChangeEnemy = _prestigeChangeEnemy + 1;
+                    };
+                };
+            };
+        };
+    };
 
     //Calculate change based on radio towers
     switch (_radioTowerHolder) do
