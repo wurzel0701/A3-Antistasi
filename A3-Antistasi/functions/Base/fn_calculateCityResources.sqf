@@ -50,13 +50,39 @@ else
 
 if(_popDestroyed == 0) then
 {
+    private _prestigeChangeRebels = 0;
+    private _prestigeChangeEnemy = 0;
     //City is not yet destroyed, calculate support change
+
+    //Calculate change based on radio towers
     switch (_radioTowerHolder) do
     {
-        case teamPlayer: {[-1,_suppBoost,_city] spawn A3A_fnc_citySupportChange};
-        case Occupants: {[1,-1,_city] spawn A3A_fnc_citySupportChange};
-        case Invaders: {[-1,-1,_city] spawn A3A_fnc_citySupportChange};
+        case teamPlayer:
+        {
+            if(_prestigeRebels >= 50) then {_prestigeChangeRebels = _prestigeChangeRebels + 1};
+            if(_prestigeEnemy >= 50) then {_prestigeChangeEnemy = _prestigeChangeEnemy - 1};
+        };
+        case Occupants:
+        {
+            if(_prestigeRebels >= 50) then {_prestigeChangeRebels = _prestigeChangeRebels - 1};
+            if(_prestigeEnemy >= 50) then {_prestigeChangeEnemy = _prestigeChangeEnemy + 1};
+        };
+        case Invaders:
+        {
+            if(gameMode == 4) then
+            {
+                if(_prestigeRebels >= 50) then {_prestigeChangeRebels = _prestigeChangeRebels - 1};
+                if(_prestigeEnemy >= 50) then {_prestigeChangeEnemy = _prestigeChangeEnemy + 1};
+            }
+            else
+            {
+                if(_prestigeRebels >= 50) then {_prestigeChangeRebels = _prestigeChangeRebels - 1};
+                if(_prestigeEnemy >= 50) then {_prestigeChangeEnemy = _prestigeChangeEnemy - 1};
+            };
+        };
     };
+
+    [_prestigeChangeEnemy, _prestigeChangeRebels, _city] spawn A3A_fnc_citySupportChange;
 };
 
 private _sideEnemy = if(gameMode == 4) then {Invaders} else {Occupants};
