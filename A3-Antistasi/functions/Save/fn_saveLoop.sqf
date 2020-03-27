@@ -107,18 +107,13 @@ _jna_dataList = [];
 _jna_dataList = _jna_dataList + jna_dataList;
 ["jna_dataList", _jna_dataList] call A3A_fnc_setStatVariable;
 
-_prestigeOPFOR = [];
-_prestigeBLUFOR = [];
-
+private _cityDataArray = [];
 {
-	_city = _x;
-	_dataX = server getVariable _city;
-	_prestigeOPFOR = _prestigeOPFOR + [_dataX select 2];
-	_prestigeBLUFOR = _prestigeBLUFOR + [_dataX select 3];
+	private _city = _x;
+	private _cityData = server getVariable _city;
+    _cityDataArray pushBack [_x, _cityData];
 } forEach citiesX;
-
-["prestigeOPFOR", _prestigeOPFOR] call A3A_fnc_setStatVariable;
-["prestigeBLUFOR", _prestigeBLUFOR] call A3A_fnc_setStatVariable;
+["cityData", _cityDataArray] call A3A_fnc_setStatVariable;
 
 _markersX = markersX - outpostsFIA - controlsX;
 _garrison = [];

@@ -17,7 +17,7 @@ private _moneyAddedByCity = 0;
 private _HRAddedByCity = 0;
 
 private _cityData = server getVariable _city;
-_cityData params ["_numCiv", "_numVeh", "_prestigeEnemy", "_prestigeRebels", ["_supplySpace", [1000, 1000, 1000]], ["_supplyStored", [1000, 1000, 1000]]];
+_cityData params ["_numCiv", "_numVeh", "_prestigeEnemy", "_prestigeRebels", "_supplySpace", "_supplyStored"];
 private _radioTowerHolder = [_city] call A3A_fnc_powerCheck;
 private _multiplier = if (_radioTowerHolder != teamPlayer) then {0.5} else {1};
 

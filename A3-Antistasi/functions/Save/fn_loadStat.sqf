@@ -16,7 +16,7 @@ specialVarLoads = [
 	"prestigeBLUFOR","resourcesFIA","skillFIA","distanceSPWN","civPerc","maxUnits","destroyedSites",
 	"garrison","tasks","smallCAmrk","membersX","vehInGarage","destroyedBuildings","idlebases",
 	"idleassets","chopForest","weather","killZones","jna_dataList","controlsSDK","mrkCSAT","nextTick",
-	"bombRuns","difficultyX","gameMode","wurzelGarrison"
+	"bombRuns","difficultyX","gameMode","wurzelGarrison","cityData"
 ];
 
 _varName = _this select 0;
@@ -177,11 +177,7 @@ if (_varName in specialVarLoads) then {
 		for "_i" from 0 to (count citiesX) - 1 do {
 			_city = citiesX select _i;
 			_dataX = server getVariable _city;
-			_numCiv = _dataX select 0;
-			_numVeh = _dataX select 1;
-			_prestigeOPFOR = _varvalue select _i;
-			_prestigeBLUFOR = _dataX select 3;
-			_dataX = [_numCiv,_numVeh,_prestigeOPFOR,_prestigeBLUFOR];
+            _dataX set [2, _varValue select _i];
 			server setVariable [_city,_dataX,true];
 		};
 	};
@@ -189,14 +185,16 @@ if (_varName in specialVarLoads) then {
 		for "_i" from 0 to (count citiesX) - 1 do {
 			_city = citiesX select _i;
 			_dataX = server getVariable _city;
-			_numCiv = _dataX select 0;
-			_numVeh = _dataX select 1;
-			_prestigeOPFOR = _dataX select 2;
-			_prestigeBLUFOR = _varvalue select _i;
-			_dataX = [_numCiv,_numVeh,_prestigeOPFOR,_prestigeBLUFOR];
+            _dataX set [3, _varValue select _i];
 			server setVariable [_city,_dataX,true];
 		};
 	};
+    if (_varname == 'cityData') then
+    {
+        {
+            server setVariable [(_x select 0), (_x select 1), true];
+        } forEach _varValue;
+    };
 	if (_varname == 'idlebases') then {
 		{
 			server setVariable [(_x select 0),(_x select 1),true];
