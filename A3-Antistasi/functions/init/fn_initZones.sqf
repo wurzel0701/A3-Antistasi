@@ -146,11 +146,15 @@ configClasses (configfile >> "CfgWorlds" >> worldName >> "Names") apply {
 		_nearRoadsFinalSorted = [_roads, [], { _pos distance _x }, "ASCEND"] call BIS_fnc_sortBy;
 		_pos = _nearRoadsFinalSorted select 0;
 	};
+
+    private _sideEnemy = if(gameMode == 4) then {Invaders} else {Occupants};
+    private _colorEnemy = if(gameMode == 4) then {colorInvaders} else {colorOccupants};
+
 	_mrk = createmarker [format ["%1", _nameX], _pos];
 	_mrk setMarkerSize [_size, _size];
 	_mrk setMarkerShape "RECTANGLE";
 	_mrk setMarkerBrush "SOLID";
-	_mrk setMarkerColor colorOccupants;
+	_mrk setMarkerColor _colorEnemy;
 	_mrk setMarkerText _nameX;
 	_mrk setMarkerAlpha 0;
 	citiesX pushBack _nameX;
@@ -158,12 +162,31 @@ configClasses (configfile >> "CfgWorlds" >> worldName >> "Names") apply {
 	_dmrk = createMarker [format ["Dum%1", _nameX], _pos];
 	_dmrk setMarkerShape "ICON";
 	_dmrk setMarkerType "loc_Ruin";
-	_dmrk setMarkerColor colorOccupants;
+	_dmrk setMarkerColor _colorEnemy;
 
 	if (_nroads < _numVeh) then {_numVeh = _nroads;};
 
-	sidesX setVariable [_mrk, Occupants, true];
-	_info = [_numCiv, _numVeh, prestigeOPFOR, prestigeBLUFOR];
+    //Initiating city storage capacities and its current stored goods
+    private _storage = 1500;
+    if (_numCiv > 50) then
+    {
+        if(_numCiv < 150) then
+        {
+            _storage = 2500;
+        }
+        else
+        {
+            _storage = 5000;
+        };
+    };
+
+    private _stored = [];
+    _stored pushBack ((0.5 + (random 0.25)) * _storage);
+    _stored pushBack ((0.5 + (random 0.25)) * _storage);
+    _stored pushBack ((0.5 + (random 0.25)) * _storage);
+
+	sidesX setVariable [_mrk, _sideEnemy, true];
+	_info = [_numCiv, _numVeh, prestigeOPFOR, prestigeBLUFOR, [_storage, _storage, _storage], _stored];
 	server setVariable [_nameX, _info, true];
 };	//find in congigs faster then find location in 25000 radius
 if (debug) then {
@@ -282,7 +305,7 @@ if (count _posAntennas > 0) then {
 			_antenna = _antennaProv select 0;
 
 			if (_i in _blacklistPos) then {
-				_antenna setdamage 1;	
+				_antenna setdamage 1;
 			} else {
 				_antenna = ([_antenna] call _replaceBadAntenna);
 				antennas pushBack _antenna;
