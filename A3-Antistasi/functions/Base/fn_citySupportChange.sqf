@@ -1,41 +1,61 @@
-private ["_opfor","_blufor","_pos","_city","_dataX","_numCiv","_numVeh","_roads","_prestigeOPFOR","_prestigeBLUFOR"];
+params ["_enemyChange", "_rebelChange", "_city"];
 
+/*  Changes the support values of the given city
+
+    Execution on: All
+
+    Scope: External
+
+    Params:
+        _enemyChange : NUMBER : The amount of points the support of Occupants/Invaders should change
+        _rebelChange : NUMBER : The amount of points the support of the rebels should change
+        _city : STRING or ARRAY : Either the marker name of the city or a position from which the nearest city will get calculated
+
+    Returns:
+        true (Why? No idea, it doesn't returns anything if it fails)
+*/
+
+private _fileName = "citySupportChange";
 waitUntil {!cityIsSupportChanging};
 cityIsSupportChanging = true;
-_opfor = _this select 0;
-_blufor = _this select 1;
-_pos = _this select 2;
-if (_pos isEqualType "") then {_city = _pos} else {_city = [citiesX, _pos] call BIS_fnc_nearestPosition};
-_dataX = server getVariable _city;
-if (isNil "_dataX" || {!(_dataX isEqualType [])}) exitWith
+
+if !(_pos isEqualType "") then
+{
+    _city = [citiesX, _pos] call BIS_fnc_nearestPosition
+};
+private _cityData = server getVariable _city;
+if (isNil "_cityData" || {!(_cityData isEqualType [])}) exitWith
 {
 	cityIsSupportChanging = false;
-	diag_log format ["%1: [Antistasi] | ERROR | citySupportChange.sqf | Passed %2 as city, pos was %3.",servertime, _city, _pos];
+    [
+        1,
+        format ["Could not get city data for %1", _city],
+        _fileName
+    ] call A3A_fnc_log;
 };
-_numCiv = _dataX select 0;
-_numVeh = _dataX select 1;
-_prestigeOPFOR = _dataX select 2;
-_prestigeBLUFOR = _dataX select 3;
 
-if (_prestigeOPFOR + _prestigeBLUFOR + _opfor > 100) then
-	{
-	_opfor = (_prestigeOPFOR + _prestigeBLUFOR) - 100;
-	};
-_prestigeOPFOR = _prestigeOPFOR + _opfor;
-if (_prestigeOPFOR + _prestigeBLUFOR + _blufor > 100) then
-	{
-	_blufor = (_prestigeOPFOR + _prestigeBLUFOR) - 100;
-	};
-_prestigeBLUFOR = _prestigeBLUFOR + _blufor;
+private _prestigeEnemy = _cityData select 2;
+private _prestigeRebel = _cityData select 3;
 
+if (_prestigeEnemy + _prestigeRebel + _enemyChange > 100) then
+{
+	_enemyChange = (_prestigeEnemy + _prestigeRebel) - 100;
+};
+_prestigeEnemy = _prestigeEnemy + _enemyChange;
+if (_prestigeEnemy + _prestigeRebel + _rebelChange > 100) then
+{
+	_rebelChange = (_prestigeEnemy + _prestigeRebel) - 100;
+};
+_prestigeRebel = _prestigeRebel + _rebelChange;
 
-if (_prestigeOPFOR > 100) then {_prestigeOPFOR = 100};
-if (_prestigeBLUFOR > 100) then {_prestigeBLUFOR = 100};
-if (_prestigeOPFOR < 0) then {_prestigeOPFOR = 0};
-if (_prestigeBLUFOR < 0) then {_prestigeBLUFOR = 0};
+if (_prestigeEnemy > 100) then {_prestigeEnemy = 100};
+if (_prestigeRebel > 100) then {_prestigeRebel = 100};
+if (_prestigeEnemy < 0) then {_prestigeEnemy = 0};
+if (_prestigeRebel < 0) then {_prestigeRebel = 0};
 
-_dataX = [_numCiv, _numVeh,_prestigeOPFOR,_prestigeBLUFOR];
+_cityData set [2, _prestigeEnemy];
+_cityData set [3, _prestigeRebel];
 
-server setVariable [_city,_dataX,true];
+server setVariable [_city,_cityData,true];
 cityIsSupportChanging = false;
 true
