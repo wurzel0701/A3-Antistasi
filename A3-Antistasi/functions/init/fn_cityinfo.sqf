@@ -1,5 +1,5 @@
 
-private ["_textX","_dataX","_numCiv","_prestigeOPFOR","_prestigeBLUFOR","_power","_busy","_siteX","_positionTel","_garrison"];
+private ["_textX","_dataX","_numCiv","_prestigeOPFOR","_prestigeBLUFOR","_busy","_siteX","_positionTel","_garrison"];
 positionTel = [];
 
 _popFIA = 0;
@@ -40,45 +40,43 @@ while {visibleMap} do
 			_textX = format ["%2 HQ%1",[_siteX] call A3A_fnc_garrisonInfo,nameTeamPlayer];
 			};
 		if (_siteX in citiesX) then
-			{
-			_dataX = server getVariable _siteX;
+		{
+			private _cityData = server getVariable _siteX;
+            _cityData params ["_numCiv", "_numVeh", "_prestigeEnemy", "_prestigeRebels", ["_supplySpace", [1000, 1000, 1000]], ["_supplyStored", [1000, 1000, 1000]]];
 
-			_numCiv = _dataX select 0;
-			_prestigeOPFOR = _dataX select 2;
-			_prestigeBLUFOR = _dataX select 3;
-			_power = [_siteX] call A3A_fnc_powerCheck;
-			_textX = format ["%1<br/><br/>Pop %2<br/>%6 Support: %3 %5<br/>%7 Support: %4 %5",[_siteX,false] call A3A_fnc_location,_numCiv,_prestigeOPFOR,_prestigeBLUFOR,"%",nameOccupants,nameTeamPlayer];
-			_positionX = getMarkerPos _siteX;
-			_result = "NONE";
-			switch (_power) do
-				{
-				case teamPlayer: {_result = format ["%1",nameTeamPlayer]};
-				case Occupants: {_result = format ["%1",nameOccupants]};
-				case Invaders: {_result = format ["%1",nameInvaders]};
-				};
-			/*_ant1 = [antennas,_positionX] call BIS_fnc_nearestPosition;
-			_ant2 = [antennasDead, _positionX] call BIS_fnc_nearestPosition;
-			if (_ant1 distance _positionX > _ant2 distance _positionX) then
-				{
-				_result = "NONE";
-				}
-			else
-				{
-				_outpost = [markersX,_ant1] call BIS_fnc_NearestPosition;
-				if (sidesX getVariable [_siteX,sideUnknown] == teamPlayer) then
-					{
-					if (sidesX getVariable [_outpost,sideUnknown] == teamPlayer) then {_result = format ["%1",nameTeamPlayer]} else {if (sidesX getVariable [_outpost,sideUnknown] == Invaders) then {_result = "NONE"}};
-					}
-				else
-					{
-					if (sidesX getVariable [_outpost,sideUnknown] == teamPlayer) then {_result = format ["%1",nameTeamPlayer]} else {if (sidesX getVariable [_outpost,sideUnknown] == Invaders) then {_result = "NONE"}};
-					};
-				};
-			*/
-			_textX = format ["%1<br/>Influence: %2",_textX,_result];
+            private _nameEnemy = if(gameMode == 4) then {nameInvaders} else {nameOccupants};
+
+			private _radioTowerHolder = [_siteX] call A3A_fnc_powerCheck;
+
+			_textX = format
+            [
+                "%1<br/><br/>Pop %2<br/>%6 Support: %3 %5<br/>%7 Support: %4 %5",
+                [_siteX,false] call A3A_fnc_location,
+                _numCiv,
+                _prestigeEnemy,
+                _prestigeRebels,
+                "%",
+                _nameEnemy,
+                nameTeamPlayer
+            ];
+
+			_result = "They don't care about the radio currently!";
+            if((_prestigeEnemy >= 50) || (_prestigeRebels >= 50)) then
+            {
+                switch (_radioTowerHolder) do
+    			{
+    				case teamPlayer: {_result = format ["%1",nameTeamPlayer]};
+    				case Occupants: {_result = format ["%1",nameOccupants]};
+    				case Invaders: {_result = format ["%1",nameInvaders]};
+    			};
+            };
+			_textX = format ["%1<br/>Radio: %2",_textX,_result];
+
+            _textX = format ["%1<br/><br/>Storage:<br/>%2", _textX, [_supplySpace, _supplyStored] call A3A_fnc_createStorageText];
+
 			if (_siteX in destroyedSites) then {_textX = format ["%1<br/>DESTROYED",_textX]};
-			if (sidesX getVariable [_siteX,sideUnknown] == teamPlayer) then {_textX = format ["%1<br/>%2",_textX,[_siteX] call A3A_fnc_garrisonInfo]};
-			};
+			if (sidesX getVariable [_siteX,sideUnknown] == teamPlayer) then {_textX = format ["%1<br/><br/>%2",_textX,[_siteX] call A3A_fnc_garrisonInfo]};
+		};
 		if (_siteX in airportsX) then
 			{
 			if (not(sidesX getVariable [_siteX,sideUnknown] == teamPlayer)) then

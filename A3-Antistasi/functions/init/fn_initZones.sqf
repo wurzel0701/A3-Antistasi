@@ -181,9 +181,9 @@ configClasses (configfile >> "CfgWorlds" >> worldName >> "Names") apply {
     };
 
     private _stored = [];
-    _stored pushBack ((0.5 + (random 0.25)) * _storage);
-    _stored pushBack ((0.5 + (random 0.25)) * _storage);
-    _stored pushBack ((0.5 + (random 0.25)) * _storage);
+    _stored pushBack (round ((0.5 + (random 0.25)) * _storage));
+    _stored pushBack (round ((0.5 + (random 0.25)) * _storage));
+    _stored pushBack (round ((0.5 + (random 0.25)) * _storage));
 
 	sidesX setVariable [_mrk, _sideEnemy, true];
 	_info = [_numCiv, _numVeh, prestigeOPFOR, prestigeBLUFOR, [_storage, _storage, _storage], _stored];

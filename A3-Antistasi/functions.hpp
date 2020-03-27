@@ -46,6 +46,7 @@ class A3A
 		class createControls {};
 		class createOutpostsFIA {};
 		class createPetros {};
+        class createStorageText {};
 		class deleteControls {};
 		class destroyCity {};
 		class distance {};
