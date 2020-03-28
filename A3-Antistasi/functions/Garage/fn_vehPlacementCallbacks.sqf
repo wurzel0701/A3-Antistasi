@@ -218,10 +218,15 @@ switch (_callbackTarget) do {
     {
 		switch (_callbackType) do {
 			case CALLBACK_VEH_PLACEMENT_CLEANUP: {
+                missionNamespace setVariable ["boxGetsGrabbed", false, true];
+                player setVariable ["crateIndex", nil];
+                player setVariable ["crateString", nil];
 			};
 
 			case CALLBACK_VEH_PLACEMENT_CANCELLED: {
                 missionNamespace setVariable ["boxGetsGrabbed", false, true];
+                player setVariable ["crateIndex", nil];
+                player setVariable ["crateString", nil];
 			};
 
 			case CALLBACK_SHOULD_CANCEL_PLACEMENT: {
@@ -255,14 +260,36 @@ switch (_callbackTarget) do {
 
 			case CALLBACK_VEH_PLACED_SUCCESSFULLY: {
 				private _purchasedVeh = _callbackParams param [0];
-                //TODO reduce amount on server and init crate
+
+                private _available = server getVariable ["cratesAvailable", [0,0,0]];
+                private _crateIndex = player getVariable "crateIndex";
+                if((_available select _crateIndex) > 0) then
+                {
+                    _available set [_crateIndex, (_available select _crateIndex) - 1];
+                    [
+                        2,
+                        format ["%1 has grabbed a %2 supply box", player, player getVariable "crateString"],
+                        "vehPlacementCallbacks",
+                        true
+                    ] call A3A_fnc_log;
+                    server setVariable ["cratesAvailable", _available, true];
+                    //TODO init crate here
+                }
+                else
+                {
+                    //Player managed to duplicate crate, delete it
+                    [
+                        2,
+                        format ["%1 has tried to duplicate a %2 supply box, delete box", player, player getVariable "crateString"],
+                        "vehPlacementCallbacks",
+                        true
+                    ] call A3A_fnc_log;
+                    deleteVehicle _purchasedVeh;
+                    ["Crate duplication", "Did you really just tried to duplicate a crate? A supply crate? For real?"] call A3A_fnc_customHint;
+                };
                 missionNamespace setVariable ["boxGetsGrabbed", false, true];
-                [
-                    2,
-                    format ["%1 has grabbed a supply box", player],
-                    "vehPlacementCallbacks",
-                    true
-                ] call A3A_fnc_log;
+                player setVariable ["crateIndex", nil];
+                player setVariable ["crateString", nil];
 			};
 
 			case CALLBACK_VEH_CUSTOM_CREATE_VEHICLE: {

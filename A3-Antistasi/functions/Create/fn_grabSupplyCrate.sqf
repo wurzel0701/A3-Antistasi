@@ -35,11 +35,14 @@ switch (_crateType) do
 	};
 };
 
-private _available = server getVariable ["cratesAvailable", [0,0,0]];
+private _available = server getVariable ["cratesAvailable", [1,0,0]];
 if((_available select _crateType) <= 0) exitWith
 {
-    ["Supply Box", format ["There is currently no %1 box available", _crateTypeString]] call A3A_fnc_customHint;
+    ["Supply Box", format ["There is currently no %1 crate available", _crateTypeString]] call A3A_fnc_customHint;
     missionNamespace setVariable ["boxGetsGrabbed", false, true];
 };
+
+player setVariable ["crateIndex", _crateType];
+player setVariable ["crateString", _crateTypeString];
 
 [_crateTypeBox, "SUPPLY"] spawn A3A_fnc_vehPlacementBegin;
