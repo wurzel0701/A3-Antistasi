@@ -213,6 +213,7 @@ class A3A
 		class garrisonReorg {};
 		class garrisonSize {};
 		class garrisonUpdate {};
+        class grabSupplyCrate {};
 		class groupDespawner {};
 		class invaderPunish {};
 		class milBuildings {};
