@@ -98,6 +98,8 @@ DECLARE_SERVER_VAR(destroyedBuildings, []);
 server setVariable ["hr",8,true];
 //Initial faction money pool
 server setVariable ["resourcesFIA",1000,true];
+//Initial supply crate count
+server setVariable ["cratesAvailable", [1,1,1], true];
 
 ////////////////////////////////////
 //     SERVER ONLY VARIABLES     ///
@@ -611,7 +613,7 @@ DECLARE_SERVER_VAR(vehFIA, _vehFIA);
 
 // sanity check the lists to catch some serious problems early
 private _badVehs = [];
-{  
+{
     if !(isClass (configFile >> "CfgVehicles" >> _x)) then {
         _badVehs pushBackUnique _x;
     };

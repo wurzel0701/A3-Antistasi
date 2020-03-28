@@ -35,7 +35,7 @@ switch (_crateType) do
 	};
 };
 
-private _available = server getVariable ["cratesAvailable", [1,0,0]];
+private _available = server getVariable "cratesAvailable";
 if((_available select _crateType) <= 0) exitWith
 {
     ["Supply Box", format ["There is currently no %1 crate available", _crateTypeString]] call A3A_fnc_customHint;
