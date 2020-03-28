@@ -273,7 +273,7 @@ switch (_callbackTarget) do {
                         true
                     ] call A3A_fnc_log;
                     server setVariable ["cratesAvailable", _available, true];
-                    //TODO init crate here
+                    [_purchasedVeh, _crateIndex, player getVariable "crateString"] spawn A3A_fnc_initSupplyCrate;
                 }
                 else
                 {

@@ -215,6 +215,7 @@ class A3A
 		class garrisonUpdate {};
         class grabSupplyCrate {};
 		class groupDespawner {};
+        class initSupplyCrate {};
 		class invaderPunish {};
 		class milBuildings {};
 		class minefieldAAF {};
