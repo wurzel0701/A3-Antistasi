@@ -23,7 +23,7 @@ _crate setVariable ["crateString", _crateString, true];
 _crate call jn_fnc_logistics_addAction;
 
 //Add the text on the map
-[_crate, "Supply Box"] spawn A3A_fnc_inmuneConvoy;
+[_crate, format ["%1 Supply Box", _crateString]] spawn A3A_fnc_inmuneConvoy;
 
 _crate addEventHandler
 [

@@ -16,17 +16,17 @@ switch (_crateType) do
     case 0:
     {
         _crateTypeBox = "Land_PaperBox_01_open_boxes_F";
-        _crateTypeString = "food";
+        _crateTypeString = "Food";
     };
 	case 1:
     {
         _crateTypeBox = "Land_PaperBox_01_open_water_F";
-        _crateTypeString = "water";
+        _crateTypeString = "Water";
     };
 	case 2:
     {
         _crateTypeBox = "CargoNet_01_barrels_F";
-        _crateTypeString = "fuel";
+        _crateTypeString = "Fuel";
     };
 	default
     {
