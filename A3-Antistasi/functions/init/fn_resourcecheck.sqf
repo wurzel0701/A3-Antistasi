@@ -66,6 +66,18 @@ while {true} do
 	[] call A3A_fnc_economicsAI;
     [] call A3A_fnc_cleanConvoyMarker;
 
+    //Update the amount of crates available
+    private _availableCrates = server getVariable "cratesAvailable";
+    for "_i" from 0 to 2 do
+    {
+        private _amount = _availableCrates select _i;
+        if(_amount < 5) then
+        {
+            _availableCrates set [_i, _amount + 1];
+        };
+    };
+    server setVariable ["cratesAvailable", _availableCrates, true];
+
 	if (isMultiplayer) then
 	{
 		[] spawn A3A_fnc_promotePlayer;
