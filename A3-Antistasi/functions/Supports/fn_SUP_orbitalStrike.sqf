@@ -33,14 +33,21 @@ _li1 setLightAmbient[0,0.5,0.8];
 _li1 setLightColor[0,0.5,0.8];
 _li1 lightAttachObject [_strikeObject, [0,0,0]];
 
-waitUntil {sleep 0.1; (getPosATL _strikeObject) select 2 < 1000};
-hint "Play thunder now";
+playSound "StrikeThunder";
 
-waitUntil {sleep 0.1; (getPosATL _strikeObject) select 2 < 25};
-hint "Play impact sound now";
 
 waitUntil {sleep 0.1; (getPosATL _strikeObject) select 2 < 10};
 _strikeObject enableSimulation false;
+
+{
+    [_x] spawn
+    {
+        params ["_player"];
+        playSound "StrikeImpact";
+        sleep 1;
+        playSound "StrikeSound";
+    };
+} forEach _players;
 
 _shockWaveParticle = "#particlesource" createVehicleLocal getPos _strikeObject;
 _shockWaveParticle setParticleParams
@@ -72,19 +79,44 @@ _shockWaveParticle setDropInterval 0.0002;
 deleteVehicle _grav_raza;
 
 {
-    [_x, _impactPosition] spawn
+    [_x, _impactPosition, _strikeObject] spawn
     {
-        params ["_player", "_impactPosition"];
+        _fn_playSoundTillDead =
+        {
+            params ["_sound", "_strikeObject", "_earthquakeStrength"];
+            while {!(isNull _strikeObject)} do
+            {
+                playSound _sound;
+                addCamShake [_earthquakeStrength, 20, 5];
+                sleep 7;
+            };
+        };
+
+        params ["_player", "_impactPosition", "_strikeObject"];
         private _distance = _player distance _impactPosition;
         if(_distance > 2000) exitWith {};
-        hint "Cam Shake Earthquake";
         if(_distance < 1000) then
         {
-            addCamShake [10, 25, 5];
+
+            if(_distance < 500) then
+            {
+                ["EarthquakeHeavy", _strikeObject, 15] spawn _fn_playSoundTillDead;
+            }
+            else
+            {
+                ["EarthquakeMore", _strikeObject, 10] spawn _fn_playSoundTillDead;
+            };
         }
         else
         {
-            addCamShake [10 - (10 * (_distance - 1000)/1000), 25, 5];
+            if(_distance < 1500) then
+            {
+                ["EarthquakeLess", _strikeObject, 5] spawn _fn_playSoundTillDead;
+            }
+            else
+            {
+                ["EarthquakeLight", _strikeObject, 3] spawn _fn_playSoundTillDead;
+            };
         };
 
         [_distance] spawn
@@ -95,21 +127,20 @@ deleteVehicle _grav_raza;
             private _value = 0;
             if(_distance < 1250) then
             {
-                _value = 30 - (30 * (_distance/1250));
+                _value = 50 * (1 - (_distance/1250));
             };
         	"dynamicBlur" ppEffectEnable true;
         	"dynamicBlur" ppEffectAdjust [_value];
         	"dynamicBlur" ppEffectCommit 0;
         	"dynamicBlur" ppEffectAdjust [0.0];
-        	"dynamicBlur" ppEffectCommit 3;
-        	sleep 5;
+        	"dynamicBlur" ppEffectCommit 5;
+        	sleep 6;
         	"dynamicBlur" ppEffectEnable false;
         };
         if(_distance < 750) then
         {
             sleep (_distance/120);
-            hint "Cam Shake Shockwave";
-            addCamShake [50 * (1 - (_distance/1000)), 6, 60];
+            addCamShake [30 * (1 - (_distance/1000)), 6, 60];
         };
 
     };
