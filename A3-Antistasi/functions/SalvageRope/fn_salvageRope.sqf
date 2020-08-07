@@ -87,7 +87,7 @@ attachRope = {
 	sleep _time;
 	ropeDestroy (_vehicle getVariable "Rope2");
 	[_vehicle, _cargo] call jn_fnc_logistics_load;
-	_cargo call jn_fnc_logistics_addAction;
+	_cargo call A3A_fnc_logistics_addLoadAction;
 	_cargo setVariable ["SalvageCrate",nil,true];
 	_vehicle setVariable ["Rope2",nil,true];
 	_vehicle setVariable ["Rope",nil,true];

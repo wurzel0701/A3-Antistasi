@@ -139,7 +139,7 @@ _vehiclesX pushBack _flagX;
 private _ammoBoxType = if (_sideX == Occupants) then {NATOAmmoBox} else {CSATAmmoBox};
 private _ammoBox = _ammoBoxType createVehicle _positionX;
 [_ammoBox] spawn A3A_fnc_fillLootCrate;
-_ammoBox call jn_fnc_logistics_addAction;
+_ammoBox call A3A_fnc_logistics_addLoadAction;
 _vehiclesX pushBack _ammoBox;
 
 _roads = _positionX nearRoads _size;
