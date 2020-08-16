@@ -96,7 +96,7 @@ if(_isLarge) then
     _light setLightAttenuation [1,90,90,85,0,1];
     _light lightAttachObject [_intel, [0,0,0]];
 
-    private _isTrap = (random 10 < (20 + (4 * tierWar)));
+    private _isTrap = (random 100 < (20 + (4 * tierWar)));
     if(_isTrap) then
     {
         [3, format ["Large intel on %1 is selected as trap, spawning explosives", _marker], _fileName, true] call A3A_fnc_log;
