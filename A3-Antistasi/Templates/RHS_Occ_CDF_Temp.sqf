@@ -26,17 +26,17 @@ NATOAmmobox = "I_supplyCrate_F";
 //PvP Loadouts
 NATOPlayerLoadouts = [
 	//Team Leader
-	"rhsgref_cdf_para_squadleader",
+	["rhs_gref_teamLeader"] call A3A_fnc_getLoadout,
 	//Medic
-	"rhsgref_cdf_para_medic",
+	["rhs_gref_medic"] call A3A_fnc_getLoadout,
 	//Autorifleman
-	"rhsgref_cdf_para_autorifleman",
+	["rhs_gref_machineGunner"] call A3A_fnc_getLoadout,
 	//Marksman
-	"rhsgref_cdf_para_marksman",
-	//Anti-tank Scout
-	"rhsgref_cdf_para_grenadier",
-	//AT2
-	"rhsgref_cdf_para_grenadier"
+	["rhs_gref_marksman"] call A3A_fnc_getLoadout,
+	//Anti Tank
+	["rhs_gref_AT"] call A3A_fnc_getLoadout,
+	//Assistant Anti Tank
+	["rhs_gref_AAT"] call A3A_fnc_getLoadout
 ];
 
 //PVP Player Vehicles
@@ -179,7 +179,7 @@ vehPoliceCar = "rhsgref_un_uaz";
 NATOMG = "rhsgref_cdf_DSHKM";
 staticATOccupants = "rhsgref_cdf_SPG9M";
 staticAAOccupants = "rhsgref_cdf_Igla_AA_pod";
-NATOMortar = "rhsgref_cdf_reg_m252";
+NATOMortar = "rhsgref_cdf_reg_M252";
 
 //Static Weapon Bags
 MGStaticNATOB = "RHS_DShkM_Gun_Bag";

@@ -21,7 +21,7 @@ Parameters 2:
 	<ARRAY> Empty array.
 
 Returns:
-	<BOOLEAN> True if hasn't crashed; False is invalid params; nothing if it has crashed.
+	<BOOLEAN> true if it hasn't crashed; false is invalid params; nil if it has crashed.
 
 Examples:
 	private _keys = ["test","420"];
@@ -43,7 +43,7 @@ if (typeName _UID == "OBJECT" && {isPlayer _UID}) then {
 	_UID = getPlayerUID _UID;
 };
 if (typeName _UID != "STRING" || {_UID in ["","punishment_dataNamespace"]}) exitWith {
-	[1, format ["INVALID PARAMS | _UID=""%1""", _UID], _filename] call A3A_fnc_log;
+	[1, format ["INVALID PARAMS | _UID=""%1""", _UID], _filename] remoteExecCall ["A3A_fnc_log",2,false];
 	false;
 };
 

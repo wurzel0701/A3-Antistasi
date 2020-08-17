@@ -10,51 +10,55 @@ Scope:
 	<GLOBAL> Execute on all players.
 
 Environment:
-	<ANY>
+	<SCHEDULED>
 
 Parameters:
-	<OBJECT> The detainee that the actions pertains to.
+	<STRING> The UID of the detainee that the actions pertains to.
 
 Returns:
-	<BOOLEAN> True if hasn't crashed; False is detainee is free; nothing if it has crashed.
+	<BOOLEAN> true if it hasn't crashed; false if the detainee is free; nil if it has crashed.
 
 Examples:
-	[_detainee] remoteExec ["A3A_fnc_punishment_addActionForgive",0,false];
+	[_UID] remoteExec ["A3A_fnc_punishment_addActionForgive",0,false];
 
 Author: Caleb Serafin
-Date Updated: 29 May 2020
 License: MIT License, Copyright (c) 2019 Barbolani & The Official AntiStasi Community
 */
-params ["_detainee"];
+params ["_UID"];
 private _filename = "fn_punishment_addActionForgive.sqf";
 
-private _keyPairs = [["offenceTotal",0]];
-([getPlayerUID _detainee,_keyPairs] call A3A_fnc_punishment_dataGet) params ["_offenceTotal"];
+private _keyPairs = [["offenceTotal",0],["name","NO NAME"]];
+([_UID,_keyPairs] call A3A_fnc_punishment_dataGet) params ["_offenceTotal","_name"];
 if (_offenceTotal < 1) exitWith {false};
-
-private _addAction_parameters = [
-	"Refresh Admin Action",
-	{
-		params ["_target", "_caller", "_actionId", "_arguments"];
-		[_arguments] remoteExec ["A3A_fnc_punishment_removeActionForgive",0,false];
-		uiSleep 1;
-		[_arguments] remoteExec ["A3A_fnc_punishment_addActionForgive",0,false];
-	},
-	_detainee,
-	7
-];
-_detainee addAction _addAction_parameters;
 
 if ([] call BIS_fnc_admin > 0 || isServer && hasInterface) then {
 	private _addAction_parameters = [
-		format["[Forgive FF] ""%1""",name _detainee],
+		format["[Forgive FF] ""%1""",_name],
 		{
 			params ["_target", "_caller", "_actionId", "_arguments"];
-			[_arguments,"forgive"] remoteExec ["A3A_fnc_punishment_release",2,false];
+			if ([] call BIS_fnc_admin > 0 || isServer) then {
+				[_arguments,"forgive"] remoteExec ["A3A_fnc_punishment_release",2,false];
+			};
+			player removeAction _actionId;
 		},
-		_detainee,
+		_UID,
 		0.1
 	];
 	player addAction _addAction_parameters;
+};
+
+private _detainee = [_UID] call BIS_fnc_getUnitByUid;
+if (player isEqualTo _detainee) then {
+	uiSleep 5; // Prevents detainee from spamming action.
+	private _addAction_parameters = [
+		"Refresh Admin Action",
+		{
+			params ["_target", "_caller", "_actionId", "_arguments"];
+			[_arguments,true] remoteExec ["A3A_fnc_punishment_removeActionForgive",0,false];
+		},
+		_UID,
+		7
+	];
+	_detainee addAction _addAction_parameters;
 };
 true;

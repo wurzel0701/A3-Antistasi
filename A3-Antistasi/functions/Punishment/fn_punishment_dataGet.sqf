@@ -1,6 +1,6 @@
 /*
 Function:
-	A3A_fnc_punishment_dataAdd
+	A3A_fnc_punishment_dataGet
 
 Description:
 	1. Gets values of specified keys in a UID entry;
@@ -35,7 +35,7 @@ Returns 3:
 	<ARRAY<STRING>> List of all UID entries in _punishment_dataNamespace.
 
 Returns "INVALID PARAMS":
-	False;
+	false;
 
 Examples:
 	private _keyPairs = [ ["test",0], ["420",0] ];
@@ -58,7 +58,7 @@ if (typeName _UID == "OBJECT" && {isPlayer _UID}) then {
 	_UID = getPlayerUID _UID;
 };
 if !(typeName _UID == "STRING") exitWith {
-	[1, format ["INVALID PARAMS | _UID=""%1""", _UID], _filename] call A3A_fnc_log;
+	[1, format ["INVALID PARAMS | _UID=""%1""", _UID], _filename] remoteExecCall ["A3A_fnc_log",2,false];
 	false;
 };
 
