@@ -1,5 +1,6 @@
 //JNL mounting nodes for cargo and statics.
-jnl_vehicleHardpoints append [
+logistics_vehicleHardpoints append [
+  //hardpoints needs to be redone
 //4x4s
 //Dodge 3/4
   ["\uns_wheeled_w\m37b\uns_m37b1.p3d",[
@@ -26,10 +27,13 @@ jnl_vehicleHardpoints append [
 //Boats
 
 ];
-//Add to the weapon sets
-jnl_smallVicWeapons append [];
-jnl_largeVicWeapons append [];
-//Weapon lists for each vehicle.
-jnl_allowedWeapons append [];
+
 //Offsets for adding new statics/boxes to the JNL script.
 jnl_attachmentOffset append [];
+
+//all vehicles with jnl loading nodes where the nodes are not located in the open, this can be because its inside the vehicle or it has a cover over the loading plane.
+logistics_coveredVehicles = [];
+
+//if you want a weapon to be loadable you need to add it to this as a array of [model, [blacklist specific vehicles]], 
+//if the vehicle is in the coveredVehicles array dont add it to the blacklist in this array.
+logistics_weapons = [];
