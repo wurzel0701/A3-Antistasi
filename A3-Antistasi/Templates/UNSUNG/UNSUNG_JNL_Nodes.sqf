@@ -29,7 +29,7 @@ logistics_vehicleHardpoints append [
 ];
 
 //Offsets for adding new statics/boxes to the JNL script.
-jnl_attachmentOffset append [];
+logistics_attachmentOffset append [];
 
 //all vehicles with jnl loading nodes where the nodes are not located in the open, this can be because its inside the vehicle or it has a cover over the loading plane.
 logistics_coveredVehicles = [];
