@@ -111,7 +111,6 @@ for "_i" from 0 to (count _buildings) - 1 do
             private _zpos = AGLToASL (_building buildingPos 30);
             private _pos = getPosASL _building;
             _pos = ASLToATL ([_pos select 0, _pos select 1, _zpos select 2]);
-            _pos = _pos vectorAdd [ 0, 0, 0]; //offset
             [_type, _pos, _dir] call _fnc_spawnStatic;
         };
         if 	((_typeB == "Land_Cargo_HQ_V1_F") or (_typeB == "Land_Cargo_HQ_V2_F") or (_typeB == "Land_Cargo_HQ_V3_F")) exitWith
@@ -121,7 +120,6 @@ for "_i" from 0 to (count _buildings) - 1 do
             private _zpos = AGLToASL (_building buildingPos 8);
             private _pos = getPosASL _building;
             _pos = ASLToATL ([_pos select 0, _pos select 1, _zpos select 2]);
-            _pos = _pos vectorAdd [ 0, 0, 0]; //offset
             [_type, _pos, _dir] call _fnc_spawnStatic;
         };
     };
