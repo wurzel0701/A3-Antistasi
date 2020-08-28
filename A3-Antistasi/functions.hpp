@@ -339,6 +339,15 @@ class A3A
         class showIntel {};
     };
 
+	class LTC
+	{
+		class carryCrate {};
+		class initLootToCrate {};
+		class lootFromContainer {};
+		class lootToCrate {};
+		class spawnCrate {};
+	};
+
 	class Missions
 	{
 		class AS_Official {};

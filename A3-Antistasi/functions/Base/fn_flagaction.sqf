@@ -84,6 +84,7 @@ switch _typeX do
                 removeAllActions _flag;
                 _flag setVariable ["switchActionID", -1, true];
                 if (player == player getVariable ["owner",player]) then {[] call SA_Add_Player_Tow_Actions};
+                call A3A_fnc_initLootToCrate;
             }
             else
             {
