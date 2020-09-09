@@ -1,6 +1,5 @@
 //JNL mounting nodes for cargo and statics.
 logistics_vehicleHardpoints append [
-  //hardpoints needs to be redone
   //4x4s
   //Dodge 3/4
   ["\uns_wheeled_w\m37b\uns_m37b1.p3d",[
