@@ -189,4 +189,3 @@ waitUntil {sleep 1;(spawner getVariable _markerX == 2)};
 // Chuck all the civ vehicle patrols into the despawners
 { [_x] spawn A3A_fnc_groupDespawner } forEach _groupsPatrol;
 { [_x] spawn A3A_fnc_VEHdespawner } forEach _vehPatrol;
-

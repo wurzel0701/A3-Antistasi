@@ -20,6 +20,54 @@ class CfgFunctions {
 
 class CfgSounds
 {
+    class StrikeThunder
+	{
+		name = "StrikeThunder";
+		sound[] = {"\Sounds\Thunder.wav", db+10, 1};
+		titles[] = {};
+	};
+
+	class StrikeImpact
+	{
+		name = "StrikeImpact";
+		sound[] = {"\Sounds\StrikeImpact.wav", db+45, 1};
+		titles[] = {};
+	};
+
+	class StrikeSound
+	{
+		name = "StrikeSound";
+		sound[] = {"\Sounds\StrikeSound.wav", db+10, 1};
+		titles[] = {};
+	};
+
+	class EarthquakeHeavy
+	{
+		name = "EarthquakeHeavy";
+		sound[] = {"@A3\Sounds_F\environment\ambient\quakes\earthquake4.wss", db + 45, 1};
+		titles[] = {};
+	};
+
+	class EarthquakeMore
+	{
+		name = "EarthquakeMore";
+		sound[] = {"@A3\Sounds_F\environment\ambient\quakes\earthquake3.wss", db + 45, 1};
+		titles[] = {};
+	};
+
+	class EarthquakeLess
+	{
+		name = "EarthquakeLess";
+		sound[] = {"@A3\Sounds_F\environment\ambient\quakes\earthquake2.wss", db + 45, 1};
+		titles[] = {};
+	};
+
+	class EarthquakeLight
+	{
+		name = "EarthquakeLight";
+		sound[] = {"@A3\Sounds_F\environment\ambient\quakes\earthquake1.wss", db + 45, 1};
+		titles[] = {};
+	};
     class fire
     {
         name="fire";
@@ -220,6 +268,27 @@ class CfgSounds
   		titles[] = {1, ""};
 	};
   // End Snow Script Sounds
+};
+
+class CfgNotifications
+{
+    class RadioIntercepted
+    {
+        // Title displayed as text on black background.
+        title = "Radio communication intercepted";
+        // Small icon displayed in left part. Colored by "color".
+        iconPicture = "\A3\ui_f\data\igui\cfg\simpleTasks\types\radio_ca.paa";
+        // Brief description displayed as structured text. Colored by "color", filled by arguments.
+        description = "%1";
+        // Icon and text color (copied from taskSucceeded)
+        color[] = {1,1,1,1};
+        // How many seconds will the notification be displayed
+        duration = 5;
+        // Priority; higher number = more important; tasks in queue are selected by priority
+        priority = 10;
+        //Sound played when notification pops up
+        sound = "taskSucceeded";
+    }
 };
 
 #include "MissionDescription\params.hpp"

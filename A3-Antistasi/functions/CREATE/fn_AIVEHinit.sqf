@@ -2,7 +2,7 @@
 	Installs various damage/smoke/kill/capture logic for vehicles
 	Will set and modify the "originalSide" and "ownerSide" variables on the vehicle indicating side ownership
 	If a rebel enters a vehicle, it will be switched to rebel side and added to vehDespawner
-	
+
 	Params:
 	1. Object: Vehicle object
 	2. Side: Side ownership for vehicle
@@ -145,16 +145,6 @@ else
 									if ([_LeaderX] call A3A_fnc_isMember) then {[[],"A3A_fnc_attackHQ"] remoteExec ["A3A_fnc_scheduler",2]};
 								};
 							};
-						}
-						else
-						{
-							_bases = airportsX select {(getMarkerPos _x distance _mortarX < distanceForAirAttack) and ([_x,true] call A3A_fnc_airportCanAttack) and (sidesX getVariable [_x,sideUnknown] != teamPlayer)};
-							if (count _bases > 0) then
-							{
-								_base = [_bases,_positionX] call BIS_fnc_nearestPosition;
-								_sideX = sidesX getVariable [_base,sideUnknown];
-								[[getPosASL _mortarX,_sideX,"Normal",false],"A3A_fnc_patrolCA"] remoteExec ["A3A_fnc_scheduler",2];
-							};
 						};
 					};
 					_mortarX setVariable ["detection",[_positionX,_chance]];
@@ -179,7 +169,7 @@ if (_side == civilian) then
 };
 
 // EH behaviour:
-// GetIn/GetOut/Dammaged: Runs where installed, regardless of locality 
+// GetIn/GetOut/Dammaged: Runs where installed, regardless of locality
 // Local: Runs where installed if target was local before or after the transition
 // HandleDamage/Killed: Runs where installed, only if target is local
 // MPKilled: Runs everywhere, regardless of target locality or install location
@@ -200,6 +190,36 @@ if (_side != teamPlayer) then
 		};
 		_veh removeEventHandler ["GetIn", _thisEventHandler];
 	}];
+};
+
+if(_veh isKindOf "Air") then
+{
+    //Start airspace control script if rebel player enters
+    _veh addEventHandler
+    [
+        "GetIn",
+        {
+            params ["_veh", "_role", "_unit"];
+            if((side (group _unit) == teamPlayer) && {isPlayer _unit}) then
+            {
+                [_veh] spawn A3A_fnc_airspaceControl;
+            };
+        }
+    ];
+
+
+    _veh addEventHandler
+    [
+        "IncomingMissile",
+        {
+            params ["_target", "_ammo", "_vehicle", "_instigator"];
+            private _group = group driver _target;
+            private _supportTypes = [_group, _vehicle] call A3A_fnc_chooseSupport;
+            _supportTypes = _supportTypes - ["QRF"];
+            private _reveal = [getPos _vehicle, side _group] call A3A_fnc_calculateSupportCallReveal;
+            [_vehicle, 4, _supportTypes, side _group, _reveal] spawn A3A_fnc_sendSupport;
+        }
+    ]
 };
 
 // Handler to prevent vehDespawner deleting vehicles for an hour after rebels exit them
@@ -232,4 +252,3 @@ if(!hasIFA && typeOf _veh in [vehSDKBike,vehNATOBike,vehCSATBike]) then {_veh ca
 
 // deletes vehicle if it exploded on spawn...
 [_veh] spawn A3A_fnc_cleanserVeh;
-

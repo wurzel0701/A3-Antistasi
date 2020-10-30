@@ -1,3 +1,5 @@
+params [["_side", sideEnemy]];
+
 /*  Handles the large attack that also are missions
 
     Execution on: HC or Server
@@ -10,8 +12,6 @@
     Returns:
         Nothing
 */
-
-params [["_side", sideEnemy]];
 
 private _fileName = "rebelAttack";
 [2, format ["Starting large attack script for side %1", _side], _fileName, true] call A3A_fnc_log;

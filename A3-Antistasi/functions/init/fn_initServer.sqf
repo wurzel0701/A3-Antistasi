@@ -47,6 +47,9 @@ if (isMultiplayer) then {
 	helmetLossChance = "helmetLossChance" call BIS_fnc_getParamValue; publicVariable "helmetLossChance";
 	LootToCrateEnabled = if ("EnableLootToCrate" call BIS_fnc_getParamValue == 1) then {true} else {false}; publicVariable "LootToCrateEnabled";
 	LTCLootUnlocked = if ("LTCLootUnlocked" call BIS_fnc_getParamValue == 1) then {true} else {false}; publicVariable "LTCLootUnlocked";
+    //Support settings
+    allowUnfairSupports = [false, true] select ("allowUnfairSupports" call BIS_fnc_getParamValue);
+    allowFuturisticSupports = allowUnfairSupports && ([false, true] select ("allowFuturisticSupports" call BIS_fnc_getParamValue));
 } else {
 	[2, "Setting Singleplayer Params", _fileName] call A3A_fnc_log;
 	//These should be set in the set parameters dialog.
@@ -78,6 +81,9 @@ if (isMultiplayer) then {
 	LootToCrateEnabled = true;
 	LTCLootUnlocked = false;
     startWithLongRangeRadio = true;
+
+    allowUnfairSupports = false;
+    allowFuturisticSupports = false;
 };
 
 [] call A3A_fnc_crateLootParams;
@@ -237,6 +243,7 @@ waitUntil {sleep 1;!(isNil "placementDone")};
 distanceXs = [] spawn A3A_fnc_distance;
 [] spawn A3A_fnc_resourcecheck;
 [] spawn A3A_fnc_aggressionUpdateLoop;
+[] spawn A3A_fnc_initSupportCooldowns;
 [] execVM "Scripts\fn_advancedTowingInit.sqf";
 savingServer = false;
 

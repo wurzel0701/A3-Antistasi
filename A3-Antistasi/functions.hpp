@@ -36,10 +36,12 @@ class A3A
 		class addTimeForIdle {};
         class aggressionUpdateLoop {};
 		class AILoadInfo {};
+        class airspaceControl {};
 		class rebelAttack {};
 		class blackout {};
 		class buildHQ {};
         class calculateAggression {};
+        class chooseAttackType {};
 		class citiesToCivPatrol {};
 		class citySupportChange {};
 		class commsMP {};
@@ -54,6 +56,7 @@ class A3A
 		class economicsAI {};
 		class ejectPvPPlayerIfInvalidVehicle {};
 		class FIAradio {};
+        class findBaseForQRF {};
 		class findBasesForConvoy {};
 		class findNearestGoodRoad {};
 		class flagaction {};
@@ -100,6 +103,7 @@ class A3A
 		class scheduler {};
 		class sellVehicle {};
 		class setMarkerAlphaForSide {};
+        class setPlaneLoadout {};
         class singlePlayerBlackScreenWarning {};
 		class sizeMarker {};
 		class splitVehicleCrewIntoOwnGroups {};
@@ -120,8 +124,6 @@ class A3A
 		class airbomb {};
 		class airdrop {};
 		class AIreactOnKill {};
-		class airstrike {};
-		class artillery {};
 		class artySupport {};
 		class askHelp {};
 		class assaultBuilding {};
@@ -129,10 +131,13 @@ class A3A
 		class autoHealFnc {};
 		class autoLoot {};
 		class autoRearm {};
+        class callForSupport {};
 		class canConquer {};
 		class canFight {};
 		class captureX {};
 		class chargeWithSmoke {};
+        class chooseSupport {};
+        class combatLanding {};
 		class coverage {};
 		class destroyBuilding {};
 		class doFlank {};
@@ -153,7 +158,6 @@ class A3A
 		class liberatePOW {};
 		class mineSweep {};
 		class mortarDrill {};
-		class mortarSupport {};
 		class mortyAI {};
 		class napalm {};
 		class napalmDamage {};
@@ -207,12 +211,14 @@ class A3A
 		class createAIOutposts {};
 		class createAIResources {};
 		class createAISite {};
+        class createAttackVehicle {};
 		class createCIV {};
 		class createFIAOutposts2 {};
 		class createQRF {};
 		class createSDKGarrisons {};
 		class createSDKgarrisonsTemp {};
 		class createUnit {};
+        class createVehicleQRFBehaviour {};
 		class cycleSpawn {};
 		class FIAinitBases {};
 		class findSpawnPosition {};
@@ -226,13 +232,14 @@ class A3A
 		class minefieldAAF {};
 		class mortarPos {};
 		class NATOinit {};
-		class patrolCA {};
 		class patrolReinf {};
 		class reinforcementsAI {};
 		class remoteBattle {};
 		class removeVehFromPool {};
 		class safeVehicleSpawn {};
+        class singleAttack {};
 		class spawnGroup {};
+        class spawnVehicleAtMarker {};
 		class updateCAMark {};
 		class vehAvailable {};
 		class VEHdespawner {};
@@ -525,6 +532,50 @@ class A3A
 		class varNameToSaveName {};
 		class saveLoop {};
 	};
+
+    class Supports
+    {
+        class addSupportTarget {};
+        class calculateSupportCallReveal {};
+        class clearTargetArea {};
+        class createSupport {};
+        class endSupport {};
+        class initSupportCooldowns {};
+        class sendSupport {};
+        class showInterceptedSetupCall {};
+        class showInterceptedSupportCall {};
+        class SUP_airstrike {};
+        class SUP_airstrikeAvailable {};
+        class SUP_airstrikeRoutine {};
+        class SUP_ASF {};
+        class SUP_ASFAvailable {};
+        class SUP_ASFRoutine {};
+        class SUP_carpetBombs {};
+        class SUP_carpetBombsAvailable {};
+        class SUP_carpetBombsRoutine {};
+        class SUP_CAS {};
+        class SUP_CASAvailable {};
+        class SUP_CASRoutine {};
+        class SUP_CASRun {};
+        class SUP_cruiseMissile {};
+        class SUP_cruiseMissileAvailable {};
+        class SUP_cruiseMissileRoutine {};
+        class SUP_mortar {};
+        class SUP_mortarAvailable {};
+        class SUP_mortarRoutine {};
+        class SUP_orbitalStrike {};
+        class SUP_orbitalStrikeAvailable {};
+        class SUP_orbitalStrikeImpactEffects {};
+        class SUP_orbitalStrikeBeamEffects {};
+        class SUP_orbitalStrikeRoutine {};
+        class SUP_QRF {};
+        class SUP_QRFAvailable {};
+        class SUP_QRFRoutine {};
+        class SUP_SAM {};
+        class SUP_SAMAvailable {};
+        class SUP_SAMRoutine {};
+        class supportAvailable {};
+    };
 
 	class Templates
 	{

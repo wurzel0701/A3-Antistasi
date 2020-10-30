@@ -298,6 +298,27 @@ class Params
 		  texts[] = {"Error", "Info", "Debug"};
 		  default = 3;
 	 };
+     class SupportOptions
+     {
+         title = "SUPPORT OPTIONS";
+         values[] = {""};
+         texts[] = {""};
+         default = "";
+     };
+     class allowUnfairSupports
+     {
+         title = "Allow unfair supports to be used by the enemy";
+         values[] = {0, 1};
+         texts[] = {"Not allowed", "Allowed"};
+         default = 0;
+     }
+     class allowFuturisticSupports
+     {
+         title = "Allow futuristic supports to be used by the enemy (Requires unfair supports)";
+         values[] = {0, 1};
+         texts[] = {"Not allowed", "Allowed"};
+         default = 0;
+     }
      class CrateOptions
      {
           title = "LOOT CRATE OPTIONS";
