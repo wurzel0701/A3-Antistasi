@@ -2,6 +2,9 @@ params ["_side"];
 
 if(tierWar < 8) exitWith {-1};
 
+private _lastSupport = server getVariable ["lastSupport", ["", 0]];
+if((_lastSupport select 0) == "CARPETBOMB" && {(_lastSupport select 1) > time}) exitWith {-1};
+
 if !(unfairSupports) exitWith {-1};
 
 private _timerIndex = -1;

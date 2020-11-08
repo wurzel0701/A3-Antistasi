@@ -19,6 +19,9 @@ params ["_target", "_precision", "_supportTypes", "_side", "_revealCall"];
 
 private _fileName = "sendSupport";
 
+waitUntil {sleep 0.1; !supportCallInProgress};
+supportCallInProgress = true;
+
 //Calculate deprecision on position
 private _deprecisionRange = random (150 - ((_precision/4) * (_precision/4) * 125));
 private _randomDir = random 360;
@@ -52,6 +55,7 @@ private _supportArray = if(_side == Occupants) then {occupantsSupports} else {in
 //Support is already in the area, send instructions to them
 if (_supportObject != "") exitWith
 {
+    supportCallInProgress = false;
     if(_supportType != "QRF") then
     {
         [
@@ -76,7 +80,6 @@ if (_supportObject != "") exitWith
 //Delete blocked supports
 _supportTypes = _supportTypes - _blockedSupports;
 
-
 private _selectedSupport = "";
 private _timerIndex = -1;
 {
@@ -87,55 +90,13 @@ private _timerIndex = -1;
     };
 } forEach _supportTypes;
 
-
-//Temporary fix as most supports are not yet available (only airstrikes and QRFs)
-if(_selectedSupport == "") then
-{
-    if !("QRF" in _blockedSupports) then
-    {
-        _timerIndex = ["QRF", _side, _supportPos] call A3A_fnc_supportAvailable;
-        if(_timerIndex != -1) then
-        {
-            private _index = occupantsSupports findIf {((_x select 0) == "QRF") && {_supportPos inArea (_x select 1)}};
-            if(_index == -1) then
-            {
-                _index = invadersSupports findIf {((_x select 0) == "QRF") && {_supportPos inArea (_x select 1)}};
-                if(_index == -1) then
-                {
-                    _selectedSupport = "QRF";
-                }
-                else
-                {
-                    [
-                        2,
-                        format ["QRf to %1 cancelled as another QRF is already in the area", _supportPos],
-                        _fileName
-                    ] call A3A_fnc_log;
-                };
-            }
-            else
-            {
-                [
-                    2,
-                    format ["QRf to %1 cancelled as another QRF is already in the area", _supportPos],
-                    _fileName
-                ] call A3A_fnc_log;
-            };
-        };
-    };
-};
-//Fix end
-
 if(_selectedSupport == "") exitWith
 {
     [2, format ["No support available to support at %1", _supportPos], _fileName] call A3A_fnc_log;
+    supportCallInProgress = false;
 };
 
-[
-    2,
-    format ["Sending support type %1 to help at %2", _selectedSupport, _supportPos],
-    _fileName
-] call A3A_fnc_log;
+[2, format ["Sending support type %1 to help at %2", _selectedSupport, _supportPos], _fileName] call A3A_fnc_log;
 
 if(_selectedSupport in ["MORTAR", "QRF", "AIRSTRIKE", "ORBSTRIKE", "CARPETBOMB"]) then
 {
@@ -147,3 +108,6 @@ if(_selectedSupport in ["CAS", "ASF", "SAM", "GUNSHIP", "MISSILE"]) then
     //Target support methods, transmit target info
     [_side, _timerIndex, _selectedSupport, _target, _precision, _revealCall] spawn A3A_fnc_createSupport;
 };
+
+//Blocks the same support for ten minutes or until a new support happens
+server setVariable ["lastSupport", [_selectedSupport, time + 600], true];

@@ -26,7 +26,7 @@ if(_airport == "") exitWith
 };
 
 private _plane = if (_side == Occupants) then {vehNATOPlane} else {vehCSATPlane};
-private _crewUnits = if(_side == Occupants) then {NATOCrew} else {CSATCrew};
+private _crewUnits = if(_side == Occupants) then {NATOPilot} else {CSATPilot};
 private _bombType = "";
 
 private _targetMarker = createMarker [format ["%1_coverage", _supportName], _supportPos];
@@ -101,7 +101,7 @@ _strikePlane setVariable ["bombType", _bombType, true];
 
 private _timerArray = if(_side == Occupants) then {occupantsAirstrikeTimer} else {invadersAirstrikeTimer};
 
-_timerArray set [_timerIndex, time + 1200];
+_timerArray set [_timerIndex, time + 1800];
 _strikePlane setVariable ["TimerArray", _timerArray, true];
 _strikePlane setVariable ["TimerIndex", _timerIndex, true];
 _strikePlane setVariable ["supportName", _supportName, true];
@@ -117,7 +117,7 @@ _strikePlane addEventHandler
         ["TaskSucceeded", ["", "Airstrike Vessel Destroyed"]] remoteExec ["BIS_fnc_showNotification", teamPlayer];
         private _timerArray = _strikePlane getVariable "TimerArray";
         private _timerIndex = _strikePlane getVariable "TimerIndex";
-        _timerArray set [_timerIndex, (_timerArray select _timerIndex) + 2400];
+        _timerArray set [_timerIndex, (_timerArray select _timerIndex) + 3600];
         [_strikePlane getVariable "supportName", _strikePlane getVariable "side"] spawn A3A_fnc_endSupport;
         [_strikePlane] spawn A3A_fnc_postMortem;
 
@@ -143,7 +143,7 @@ _pilot addEventHandler
         [2, format ["Crew for %1 killed, airstrike aborted", _strikePlane getVariable "supportName"], "SUP_airstrike"] call A3A_fnc_log;
         private _timerArray = _strikePlane getVariable "TimerArray";
         private _timerIndex = _strikePlane getVariable "TimerIndex";
-        _timerArray set [_timerIndex, (_timerArray select _timerIndex) + 1200];
+        _timerArray set [_timerIndex, (_timerArray select _timerIndex) + 1800];
         [_unit] spawn A3A_fnc_postMortem;
     }
 ];

@@ -23,21 +23,21 @@ class CfgSounds
     class StrikeThunder
 	{
 		name = "StrikeThunder";
-		sound[] = {"\Sounds\Thunder.wav", db+10, 1};
+		sound[] = {"@A3\sounds_f_enviroment\ambient\thunders\thunder_01.wss", db+10, 1};
 		titles[] = {};
 	};
 
 	class StrikeImpact
 	{
 		name = "StrikeImpact";
-		sound[] = {"\Sounds\StrikeImpact.wav", db+45, 1};
+		sound[] = {"\Sounds\StrikeImpact.ogg", db+45, 1};
 		titles[] = {};
 	};
 
 	class StrikeSound
 	{
 		name = "StrikeSound";
-		sound[] = {"\Sounds\StrikeSound.wav", db+10, 1};
+		sound[] = {"\Sounds\StrikeSound.ogg", db+10, 1};
 		titles[] = {};
 	};
 

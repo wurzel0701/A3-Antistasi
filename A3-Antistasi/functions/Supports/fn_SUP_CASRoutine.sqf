@@ -69,7 +69,9 @@ _strikePlane addEventHandler
             private _speed = speed _projectile/3.6;
             private _targetPos = ((getPosASL _targetObj) vectorAdd [0, 0, 3.5]) vectorAdd (vectorDir _targetObj vectorMultiply ((speed _targetObj)/4.5));
             _targetPos = _targetPos apply {_x + (random 15) - 7.5};
-            _projectile setVelocity (vectorNormalized (_targetPos vectorDiff (getPosASL _projectile)) vectorMultiply (_speed));
+            private _dir = vectorNormalized (_targetPos vectorDiff (getPosASL _projectile));
+            _projectile setVelocity (_dir vectorMultiply (_speed));
+            _projectile setVectorDir _dir;
 
             //Check if next shot needs to be fired
             private _remainingShots = _strikePlane getVariable ["mainGunShots", 0];
@@ -79,7 +81,7 @@ _strikePlane addEventHandler
                 [_strikePlane, _weapon, _mode] spawn
                 {
                     params ["_strikePlane", "_weapon", "_mode"];
-                    sleep 0.02;
+                    sleep 0.03;
                     (driver _strikePlane) forceWeaponFire [_weapon, _mode];
                 };
                 _strikePlane setVariable ["mainGunShots", _remainingShots - 1];
@@ -88,10 +90,8 @@ _strikePlane addEventHandler
         if(_weapon in (_strikePlane getVariable ["rocketLauncher", []])) then
         {
             //Unguided rocket, improve course and accuracy
-            private _speed = speed _projectile/3.6;
-            private _targetPos = ((getPosASL _targetObj) vectorAdd [0, 0, 250]) vectorAdd (vectorDir _targetObj vectorMultiply ((speed _targetObj)));
-            _targetPos = _targetPos apply {_x + (random 200) - 100};
-            _projectile setVelocity (vectorNormalized (_targetPos vectorDiff (getPosASL _projectile)) vectorMultiply (_speed/1.5));
+            private _targetPos = (getPosASL _targetObj) vectorAdd (vectorDir _targetObj vectorMultiply ((speed _targetObj)));
+            private _target = _targetPos apply {_x + (random 30) - 15};
 
             //Reduce available ammo
             private _index = _ammoCount findIf {_weapon == _x select 0};
@@ -109,6 +109,20 @@ _strikePlane addEventHandler
                     (driver _strikePlane) forceWeaponFire [_weapon, _mode];
                 };
                 _strikePlane setVariable ["rocketShots", _remainingShots - 1];
+            };
+
+            [_projectile, _target, _gunner] spawn
+            {
+                params ["_projectile", "_target", "_gunner"];
+                sleep 0.05;
+                while {!(isNull _projectile) && (alive _projectile)} do
+                {
+                    private _speed = (speed _projectile)/3.6;
+                    private _dir = vectorNormalized (_target vectorDiff (getPosASL _projectile));
+                    _projectile setVelocity (_dir vectorMultiply (_speed));
+                    _projectile setVectorDir _dir;
+                    sleep 0.25;
+                };
             };
         };
         if(_weapon in (_strikePlane getVariable ["missileLauncher", []])) then

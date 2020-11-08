@@ -11,6 +11,8 @@
         Nothing
 */
 
+supportCallInProgress = false;
+
 occupantsAirstrikeTimer = [];
 invadersAirstrikeTimer = [];
 for "_i" from 0 to 1 do

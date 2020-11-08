@@ -2,6 +2,12 @@ params ["_side"];
 
 if(tierWar < 5) exitWith {-1};
 
+private _lastSupport = server getVariable ["lastSupport", ["", 0]];
+if((_lastSupport select 0) == "CAS" && {(_lastSupport select 1) > time}) exitWith {-1};
+
+//Make sure the vehicle are available
+if(vehNATOPlane == "" || vehCSATPlane == "") exitWith {-1};
+
 //Select a timer index and the max number of timers available
 private _timerIndex = -1;
 private _playerAdjustment = (floor ((count allPlayers)/4)) + 1;

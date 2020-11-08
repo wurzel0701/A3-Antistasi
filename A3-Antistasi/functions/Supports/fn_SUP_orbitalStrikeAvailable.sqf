@@ -2,6 +2,9 @@ params ["_side", "_posDestination"];
 
 if(tierWar < 9) exitWith {-1};
 
+private _lastSupport = server getVariable ["lastSupport", ["", 0]];
+if((_lastSupport select 0) == "ORBSTRIKE" && {(_lastSupport select 1) > time}) exitWith {-1};
+
 if !(allowFuturisticSupports) exitWith {-1};
 
 //Check if support is available at all

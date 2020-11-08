@@ -49,7 +49,7 @@ switch (true) do
     case (_enemy isKindOf "Man"):
     {
         private _enemiesNearEnemy = count (allUnits select {(side (group _x)) == (side (group _enemy)) && {_x distance2D _enemy < 100}});
-        if(_enemiesNearEnemy > 4) then
+        if(_enemiesNearEnemy > 6) then
         {
             //They are fighting some larger group of enemies
             if
@@ -67,16 +67,33 @@ switch (true) do
         }
         else
         {
-            //They are fighting a small group of enemies
-            if
-            (
-                _forceSupport ||
-                //Units are being cowards
-                {(random 1) < (_enemiesNearEnemy/_unitsInGroup)}
-            ) then
+            if(_enemiesNearEnemy > 2) then
             {
-                //Use more precise attacks first, if not available use spread out ones
-                _supportTypes = ["AIRSTRIKE", "MORTAR", "CANNON", "QRF"];
+                //They are fighting a medium group of enemies
+                if
+                (
+                    _forceSupport ||
+                    //Units are being cowards
+                    {(random 2) < (_enemiesNearEnemy/_unitsInGroup)}
+                ) then
+                {
+                    //Use more precise attacks first, if not available use spread out ones
+                    _supportTypes = ["AIRSTRIKE", "MORTAR", "QRF", "CANNON", "CARPETBOMB", "GUNSHIP"];
+                };
+            }
+            else
+            {
+                //They are fighting a small group of enemies
+                if
+                (
+                    _forceSupport ||
+                    //Units are being cowards
+                    {(random 1) < (_enemiesNearEnemy/_unitsInGroup)}
+                ) then
+                {
+                    //Use more precise attacks first, if not available use spread out ones
+                    _supportTypes = ["QRF", "MORTAR", "CANNON"];
+                };
             };
         };
     };

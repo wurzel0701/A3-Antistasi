@@ -73,6 +73,10 @@ switch (_supportType) do
     {
         _supportMarker = [_side, _timerIndex, _supportTarget, _supportName] call A3A_fnc_SUP_ASF;
     };
+    case ("GUNSHIP"):
+    {
+        _supportMarker = [_side, _timerIndex, _supportTarget, _supportName] call A3A_fnc_SUP_gunship;
+    };
 };
 
 if(_supportMarker != "") then
@@ -89,3 +93,5 @@ if(_supportMarker != "") then
     private _supportPos = if (_supportTarget isEqualType objNull) then {getPos _supportTarget} else {_supportTarget};
     [_revealCall + (random 0.4) - 0.2, _side, _supportType, _supportPos] spawn A3A_fnc_showInterceptedSetupCall;
 };
+
+supportCallInProgress = false;

@@ -27,7 +27,7 @@ if(_airport == "") exitWith
 };
 
 private _plane = if (_side == Occupants) then {vehNATOPlaneAA} else {vehCSATPlaneAA};
-private _crewUnits = if(_side == Occupants) then {NATOCrew} else {CSATCrew};
+private _crewUnits = if(_side == Occupants) then {NATOPilot} else {CSATPilot};
 
 private _targetMarker = createMarker [format ["%1_coverage", _supportName], getPos _supportObj];
 _targetMarker setMarkerShape "ELLIPSE";

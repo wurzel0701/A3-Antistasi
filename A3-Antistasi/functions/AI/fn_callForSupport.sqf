@@ -27,7 +27,7 @@ if((_group getVariable ["canCallSupportAt", -1]) > (dateToNumber date)) exitWith
 
 //Block the group from calling support again
 private _date = date;
-_date set [4, (_date select 4) + 10];
+_date set [4, (_date select 4) + 5];
 private _dateNumber = dateToNumber _date;
 _group setVariable ["canCallSupportAt", _dateNumber, true];
 

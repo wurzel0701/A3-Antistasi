@@ -2,6 +2,9 @@ params ["_side", "_position"];
 
 if(tierWar < 7) exitWith {-1};
 
+private _lastSupport = server getVariable ["lastSupport", ["", 0]];
+if((_lastSupport select 0) == "SAM" && {(_lastSupport select 1) > time}) exitWith {-1};
+
 if !(allowUnfairSupports) exitWith {-1};
 
 if({sidesX getVariable [_x, sideUnknown] == _side} count airportsX == 0) exitWith {-1};

@@ -108,6 +108,10 @@ private _fnc_executeWeaponFire =
                 {
                     _mode = "Close_AI";
                 };
+                if("Single" in _modes) then
+                {
+                    _mode = "Single";
+                };
             };
 
             //Force weapon fire
