@@ -159,7 +159,19 @@ _strikePlane setVariable ["InArea", false, true];
 
 private _dir = (getPos _strikePlane) getDir _setupPos;
 
-private _areaWP = _strikeGroup addWaypoint [_setupPos getPos [-2000, _dir + 90], 0];
+//Calculate loiter entry point
+private _distance = _strikePlane distance2D _setupPos;
+private _angle = asin (1500/_distance);
+private _lenght = cos (_angle) * _distance;
+
+private _height = (ATLToASL _supportPos) select 2;
+_height = _height + 500;
+
+private _entryPos = _setupPos getPos [_lenght, _dir + _angle];
+[3, format ["Entry Pos: %1", _entryPos], _fileName] call A3A_fnc_log;
+_entryPos set [2, _height];
+
+private _areaWP = _strikeGroup addWaypoint [_entryPos, 0];
 _areaWP setWaypointSpeed "FULL";
 _areaWP setWaypointType "Move";
 _areaWP setWaypointStatements ["true", "(vehicle this) setVariable ['InArea', true, true]; [3, 'CAS plane has arrived', 'CASRoutine'] call A3A_fnc_log"];

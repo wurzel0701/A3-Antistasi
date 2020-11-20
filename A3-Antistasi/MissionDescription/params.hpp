@@ -307,14 +307,14 @@ class Params
      };
      class allowUnfairSupports
      {
-         title = "Allow unfair supports to be used by the enemy";
+         title = "[Experimental - Use at own risk] Allow unfair supports to be used by the enemy";
          values[] = {0, 1};
          texts[] = {"Not allowed", "Allowed"};
          default = 0;
      }
      class allowFuturisticSupports
      {
-         title = "Allow futuristic supports to be used by the enemy (Requires unfair supports)";
+         title = "[Experimental - Use at own risk](Requires unfair supports) Allow futuristic supports to be used by the enemy";
          values[] = {0, 1};
          texts[] = {"Not allowed", "Allowed"};
          default = 0;

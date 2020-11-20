@@ -268,7 +268,14 @@ _loiterWP setWaypointType "Loiter";
 _loiterWP setWaypointLoiterRadius 2000;
 
 //Await until the plane arrived at a specific height until breaking control
-waitUntil {sleep 1; ((getPos _strikePlane) select 2) > 450};
+waitUntil
+{
+    private _velocity = velocity _strikePlane;
+    _velocity set [2, (_velocity select 2) + 0.5];
+    _strikePlane setVelocity _velocity;
+    sleep 0.5;
+    ((getPos _strikePlane) select 2) > 450
+};
 [3, format ["Gun run for %1 finished, returning control", _supportName], _fileName] call A3A_fnc_log;
 _strikePlane setVariable ["OnRun", false];
 _strikePlane setVariable ["needsRecalculation", true];

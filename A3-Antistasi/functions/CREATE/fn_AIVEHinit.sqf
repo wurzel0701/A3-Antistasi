@@ -217,7 +217,7 @@ if(_veh isKindOf "Air") then
             private _supportTypes = [_group, _vehicle] call A3A_fnc_chooseSupport;
             _supportTypes = _supportTypes - ["QRF"];
             private _reveal = [getPos _vehicle, side _group] call A3A_fnc_calculateSupportCallReveal;
-            [_vehicle, 4, _supportTypes, side _group, _reveal] spawn A3A_fnc_sendSupport;
+            [_vehicle, 4, _supportTypes, side _group, _reveal] remoteExec ["A3A_fnc_sendSupport", 2];
         }
     ]
 };

@@ -19,6 +19,13 @@ params ["_target", "_precision", "_supportTypes", "_side", "_revealCall"];
 
 private _fileName = "sendSupport";
 
+//Ensure this is running on the main server, otherwise it will break
+if(!isServer) exitWith
+{
+    [1, format ["SendSupport tried to execute on %1, which is not the hosting server!", clientOwner], _fileName] call A3A_fnc_log;
+    _this remoteExec ["A3A_fnc_sendSupport", 2];
+};
+
 waitUntil {sleep 0.1; !supportCallInProgress};
 supportCallInProgress = true;
 

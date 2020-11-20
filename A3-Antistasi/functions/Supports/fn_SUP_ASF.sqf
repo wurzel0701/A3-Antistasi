@@ -32,7 +32,7 @@ private _crewUnits = if(_side == Occupants) then {NATOPilot} else {CSATPilot};
 private _targetMarker = createMarker [format ["%1_coverage", _supportName], getPos _supportObj];
 _targetMarker setMarkerShape "ELLIPSE";
 _targetMarker setMarkerBrush "Grid";
-_targetMarker setMarkerSize [3000, 3000];
+_targetMarker setMarkerSize [8000, 8000];
 
 if(_side == Occupants) then
 {

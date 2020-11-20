@@ -1,7 +1,5 @@
 #define OFFSET      250
 
-if (not isServer and hasInterface) exitWith {};
-
 /*  Creates the bombs for airstrikes, should be started 250 meters before the actual bomb run
 
 */
